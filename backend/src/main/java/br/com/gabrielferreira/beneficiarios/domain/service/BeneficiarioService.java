@@ -6,6 +6,8 @@ import br.com.gabrielferreira.beneficiarios.domain.model.Documento;
 import br.com.gabrielferreira.beneficiarios.domain.model.enums.TipoDocumentoEnum;
 import br.com.gabrielferreira.beneficiarios.domain.repository.BeneficiarioRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +30,11 @@ public class BeneficiarioService {
 
         beneficiario = beneficiarioRepository.save(beneficiario);
         return beneficiario;
+    }
+
+    public Page<Beneficiario> buscarBeneficiariosPaginados(Integer page, Integer size){
+        PageRequest pageRequest = PageRequest.of(page, size);
+        return beneficiarioRepository.buscarBeneficiarios(pageRequest);
     }
 
     private void validarCampos(Beneficiario beneficiario){
