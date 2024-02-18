@@ -25,7 +25,9 @@ public class BeneficiarioService {
 
     @Transactional
     public Beneficiario cadastrar(Beneficiario beneficiario){
-        validarCampos(beneficiario);
+        validarCamposBeneficiario(beneficiario);
+        validarCamposDocumentos(beneficiario.getDocumentos());
+
         validarTipoTelefone(beneficiario.getTelefone());
         validarDocumentos(beneficiario);
 
@@ -49,10 +51,26 @@ public class BeneficiarioService {
         beneficiarioRepository.delete(beneficiario);
     }
 
-    private void validarCampos(Beneficiario beneficiario){
+    @Transactional
+    public Beneficiario atualizarBeneficiario(Long id, Beneficiario beneficiario){
+        Beneficiario beneficiarioEncontrado = buscarBeneficiarioPorId(id);
+
+        validarCamposBeneficiario(beneficiario);
+        validarTipoTelefone(beneficiario.getTelefone());
+
+        preencherCamposBeneficiario(beneficiarioEncontrado, beneficiario);
+
+        beneficiarioEncontrado = beneficiarioRepository.save(beneficiarioEncontrado);
+        return beneficiarioEncontrado;
+    }
+
+    private void validarCamposBeneficiario(Beneficiario beneficiario){
         beneficiario.setNome(beneficiario.getNome().trim());
         beneficiario.setTelefone(beneficiario.getTelefone().trim());
-        beneficiario.getDocumentos().forEach(documento -> documento.setDescricao(documento.getDescricao().trim()));
+    }
+
+    private void validarCamposDocumentos(List<Documento> documentos){
+        documentos.forEach(documento -> documento.setDescricao(documento.getDescricao().trim()));
     }
 
     private void validarTipoTelefone(String telefone){
@@ -83,5 +101,11 @@ public class BeneficiarioService {
                 throw new MsgException("Não vai ser possível cadastrar este beneficiário pois tem tipo de documento duplicados");
             }
         });
+    }
+
+    private void preencherCamposBeneficiario(Beneficiario beneficiarioEncontrado, Beneficiario beneficiario){
+        beneficiarioEncontrado.setNome(beneficiario.getNome());
+        beneficiarioEncontrado.setTelefone(beneficiario.getTelefone());
+        beneficiarioEncontrado.setDataNascimento(beneficiario.getDataNascimento());
     }
 }

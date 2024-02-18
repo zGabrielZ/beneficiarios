@@ -2,6 +2,7 @@ package br.com.gabrielferreira.beneficiarios.api.controller;
 
 import br.com.gabrielferreira.beneficiarios.api.dto.BeneficiarioDTO;
 import br.com.gabrielferreira.beneficiarios.api.dto.create.BeneficiarioCreateDTO;
+import br.com.gabrielferreira.beneficiarios.api.dto.update.BeneficiarioUpdateDTO;
 import br.com.gabrielferreira.beneficiarios.api.mapper.BeneficiarioMapper;
 import br.com.gabrielferreira.beneficiarios.domain.model.Beneficiario;
 import br.com.gabrielferreira.beneficiarios.domain.service.BeneficiarioService;
@@ -74,5 +75,24 @@ public class BeneficiarioController {
     public ResponseEntity<Void> deletarBeneficiarioPorId(@PathVariable Long id){
         beneficiarioService.deletarBeneficiarioPorId(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "Atualizar beneficiário")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Beneficiário atualizado",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = BeneficiarioDTO.class)) }),
+            @ApiResponse(responseCode = "400", description = "Regra de negócio",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "Beneficiário não encontrado",
+                    content = @Content)
+    })
+    @PutMapping("/{id}")
+    public ResponseEntity<BeneficiarioDTO> atualizarBeneficiario(@PathVariable Long id, @Valid @RequestBody BeneficiarioUpdateDTO beneficiarioUpdateDTO){
+        Beneficiario beneficiario = beneficiarioMapper.toBeneficiario(beneficiarioUpdateDTO);
+        Beneficiario beneficiarioAtualizado = beneficiarioService.atualizarBeneficiario(id, beneficiario);
+        BeneficiarioDTO beneficiarioDTO = beneficiarioMapper.toBeneficiarioSemDocumentosDto(beneficiarioAtualizado);
+
+        return ResponseEntity.ok().body(beneficiarioDTO);
     }
 }

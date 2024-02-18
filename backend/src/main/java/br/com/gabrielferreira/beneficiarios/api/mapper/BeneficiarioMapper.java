@@ -2,6 +2,7 @@ package br.com.gabrielferreira.beneficiarios.api.mapper;
 
 import br.com.gabrielferreira.beneficiarios.api.dto.BeneficiarioDTO;
 import br.com.gabrielferreira.beneficiarios.api.dto.create.BeneficiarioCreateDTO;
+import br.com.gabrielferreira.beneficiarios.api.dto.update.BeneficiarioUpdateDTO;
 import br.com.gabrielferreira.beneficiarios.domain.model.Beneficiario;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -11,6 +12,8 @@ import org.springframework.data.domain.Page;
 public interface BeneficiarioMapper {
 
     Beneficiario toBeneficiario(BeneficiarioCreateDTO beneficiarioCreateDTO);
+
+    Beneficiario toBeneficiario(BeneficiarioUpdateDTO beneficiarioUpdateDTO);
 
     @Mapping(target = "dataInclusao", qualifiedByName = "formatData")
     @Mapping(target = "dataAtualizacao", qualifiedByName = "formatData")
