@@ -36,7 +36,7 @@ public class Beneficiario implements Serializable {
     @Column(name = "TELEFONE", nullable = false)
     private String telefone;
 
-    @OneToMany(mappedBy = "beneficiario", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "beneficiario", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Documento> documentos = new ArrayList<>();
 
     @Column(name = "DATA_NASCIMENTO", nullable = false)
