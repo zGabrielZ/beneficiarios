@@ -61,7 +61,7 @@ public class BeneficiarioService {
             int duplicados = Collections.frequency(tipoDocumentos, tipoDocumento);
 
             if(duplicados > 1){
-                throw new MsgException("Não vai ser possível cadastrar este beneficiário pois tem mais de um tipo de documento informado");
+                throw new MsgException("Não vai ser possível cadastrar este beneficiário pois tem tipo de documento duplicados");
             }
         });
     }

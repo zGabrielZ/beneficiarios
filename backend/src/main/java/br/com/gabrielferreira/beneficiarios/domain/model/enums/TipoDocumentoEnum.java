@@ -1,5 +1,6 @@
 package br.com.gabrielferreira.beneficiarios.domain.model.enums;
 
+import br.com.gabrielferreira.beneficiarios.domain.exception.MsgException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -15,4 +16,13 @@ public enum TipoDocumentoEnum {
     INSTRUCAO_ALTA("Instruções de alta");
 
     private final String descricao;
+    
+    public static TipoDocumentoEnum toTipoDocumentoEnum(String tipoDocumento){
+        for (TipoDocumentoEnum valor : TipoDocumentoEnum.values()) {
+            if(valor.name().equals(tipoDocumento)){
+                return valor;
+            }
+        }
+        throw new MsgException("Tipo de documento informado inválido");
+    }
 }
