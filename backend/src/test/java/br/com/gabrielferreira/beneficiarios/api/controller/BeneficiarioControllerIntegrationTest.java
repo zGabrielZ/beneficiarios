@@ -13,8 +13,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.Arrays;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static br.com.gabrielferreira.beneficiarios.tests.BeneficiarioFactory.*;
@@ -36,9 +35,15 @@ class BeneficiarioControllerIntegrationTest {
 
     private BeneficiarioCreateDTO beneficiarioCreateDTO;
 
+    private Long idBeneficiarioExistente;
+
+    private Long idBeneficiarioInexistente;
+
     @BeforeEach
     void setUp(){
         beneficiarioCreateDTO = criarBeneficiario();
+        idBeneficiarioExistente = 1L;
+        idBeneficiarioInexistente = -1L;
     }
 
     @Test
@@ -141,5 +146,28 @@ class BeneficiarioControllerIntegrationTest {
 
         resultActions.andExpect(status().isOk());
         resultActions.andExpect(jsonPath("$.content").exists());
+    }
+
+    @Test
+    @DisplayName("Deve deletar beneficiário quando existir dados")
+    @Order(6)
+    void deveDeletarBeneficiarioQuandoExistirDados() throws Exception {
+        ResultActions resultActions = mockMvc
+                .perform(delete(URL.concat("/{id}"), idBeneficiarioExistente)
+                        .accept(MEDIA_TYPE_JSON));
+
+        resultActions.andExpect(status().isNoContent());
+    }
+
+    @Test
+    @DisplayName("Não deve deletar beneficiário quando não existir dados")
+    @Order(7)
+    void naoDeveDeletarBeneficiario() throws Exception {
+        ResultActions resultActions = mockMvc
+                .perform(delete(URL.concat("/{id}"), idBeneficiarioInexistente)
+                        .accept(MEDIA_TYPE_JSON));
+
+        resultActions.andExpect(status().isNotFound());
+        resultActions.andExpect(jsonPath("$.mensagem").value("Beneficiário não encontrado"));
     }
 }
