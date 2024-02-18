@@ -2,6 +2,7 @@ package br.com.gabrielferreira.beneficiarios.api.controller;
 
 import br.com.gabrielferreira.beneficiarios.api.dto.create.BeneficiarioCreateDTO;
 import br.com.gabrielferreira.beneficiarios.api.dto.create.DocumentoCreateDTO;
+import br.com.gabrielferreira.beneficiarios.api.dto.update.BeneficiarioUpdateDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,11 +40,14 @@ class BeneficiarioControllerIntegrationTest {
 
     private Long idBeneficiarioInexistente;
 
+    private BeneficiarioUpdateDTO beneficiarioUpdateDTO;
+
     @BeforeEach
     void setUp(){
         beneficiarioCreateDTO = criarBeneficiario();
         idBeneficiarioExistente = 1L;
         idBeneficiarioInexistente = -1L;
+        beneficiarioUpdateDTO = criarBeneficiarioEditar();
     }
 
     @Test
@@ -169,5 +173,30 @@ class BeneficiarioControllerIntegrationTest {
 
         resultActions.andExpect(status().isNotFound());
         resultActions.andExpect(jsonPath("$.mensagem").value("Beneficiário não encontrado"));
+    }
+
+    @Test
+    @DisplayName("Deve atualizar beneficiário quando informar dados")
+    @Order(8)
+    void deveAtualizarBeneficiarioQuandoInformarDados() throws Exception{
+        String jsonBody = objectMapper.writeValueAsString(beneficiarioUpdateDTO);
+
+        Long idEsperado = idBeneficiarioExistente;
+        String nomeEsperado = beneficiarioUpdateDTO.getNome();
+        String telefoneEsperado = beneficiarioUpdateDTO.getTelefone();
+        String dataNascimentoEsperado = beneficiarioUpdateDTO.getDataNascimento().toString();
+
+        ResultActions resultActions = mockMvc
+                .perform(put(URL.concat("/{id}"), idBeneficiarioExistente)
+                        .content(jsonBody)
+                        .contentType(MEDIA_TYPE_JSON)
+                        .accept(MEDIA_TYPE_JSON));
+
+        resultActions.andExpect(status().isOk());
+        resultActions.andExpect(jsonPath("$.id").value(idEsperado));
+        resultActions.andExpect(jsonPath("$.nome").value(nomeEsperado));
+        resultActions.andExpect(jsonPath("$.telefone").value(telefoneEsperado));
+        resultActions.andExpect(jsonPath("$.dataNascimento").value(dataNascimentoEsperado));
+        resultActions.andExpect(jsonPath("$.dataInclusao").exists());
     }
 }
