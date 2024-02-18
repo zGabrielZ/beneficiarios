@@ -5,6 +5,7 @@ import br.com.gabrielferreira.beneficiarios.api.dto.create.DocumentoCreateDTO;
 import br.com.gabrielferreira.beneficiarios.domain.model.Documento;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -24,5 +25,9 @@ public interface DocumentoMapper {
 
     default List<DocumentoDTO> toDocumentosDtos(List<Documento> documentos){
         return documentos.stream().map(this::toDocumentoDto).toList();
+    }
+
+    default Page<DocumentoDTO> toDocumentosDtos(Page<Documento> documentos){
+        return documentos.map(this::toDocumentoDto);
     }
 }

@@ -38,10 +38,14 @@ public class BeneficiarioService {
         return beneficiarioRepository.buscarBeneficiarios(pageRequest);
     }
 
+    public Beneficiario buscarBeneficiarioPorId(Long id){
+        return beneficiarioRepository.findById(id)
+                .orElseThrow(() -> new NaoEncontradoException("Beneficiário não encontrado"));
+    }
+
     @Transactional
     public void deletarBeneficiarioPorId(Long id){
-        Beneficiario beneficiario = beneficiarioRepository.findById(id)
-                .orElseThrow(() -> new NaoEncontradoException("Beneficiário não encontrado"));
+        Beneficiario beneficiario = buscarBeneficiarioPorId(id);
         beneficiarioRepository.delete(beneficiario);
     }
 
