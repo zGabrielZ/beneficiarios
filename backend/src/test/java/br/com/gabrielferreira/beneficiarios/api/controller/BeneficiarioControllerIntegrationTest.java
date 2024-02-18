@@ -199,4 +199,23 @@ class BeneficiarioControllerIntegrationTest {
         resultActions.andExpect(jsonPath("$.dataNascimento").value(dataNascimentoEsperado));
         resultActions.andExpect(jsonPath("$.dataInclusao").exists());
     }
+
+    @Test
+    @DisplayName("Não deve cadastrar beneficiário quando informar tipo de documento inválido")
+    @Order(9)
+    void naoDeveCadastrarBeneficiarioQuandoInformarTipoDocumentoInvalido() throws Exception{
+        beneficiarioCreateDTO.getDocumentos().get(0).setTipoDocumento("tipo documento inválido");
+
+        String jsonBody = objectMapper.writeValueAsString(beneficiarioCreateDTO);
+
+        ResultActions resultActions = mockMvc
+                .perform(post(URL)
+                        .content(jsonBody)
+                        .contentType(MEDIA_TYPE_JSON)
+                        .accept(MEDIA_TYPE_JSON));
+
+        resultActions.andExpect(status().isBadRequest());
+        resultActions.andExpect(jsonPath("$.titulo").value("Regra de negócio"));
+        resultActions.andExpect(jsonPath("$.mensagem").value("Tipo de documento informado inválido"));
+    }
 }
