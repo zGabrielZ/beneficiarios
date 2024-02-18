@@ -1,6 +1,7 @@
 package br.com.gabrielferreira.beneficiarios.api.mapper;
 
 import br.com.gabrielferreira.beneficiarios.api.dto.BeneficiarioDTO;
+import br.com.gabrielferreira.beneficiarios.api.dto.BeneficiarioResumidoDTO;
 import br.com.gabrielferreira.beneficiarios.api.dto.create.BeneficiarioCreateDTO;
 import br.com.gabrielferreira.beneficiarios.api.dto.update.BeneficiarioUpdateDTO;
 import br.com.gabrielferreira.beneficiarios.domain.model.Beneficiario;
@@ -19,12 +20,11 @@ public interface BeneficiarioMapper {
     @Mapping(target = "dataAtualizacao", qualifiedByName = "formatData")
     BeneficiarioDTO toBeneficiarioDto(Beneficiario beneficiario);
 
-    @Mapping(target = "documentos", ignore = true)
     @Mapping(target = "dataInclusao", qualifiedByName = "formatData")
     @Mapping(target = "dataAtualizacao", qualifiedByName = "formatData")
-    BeneficiarioDTO toBeneficiarioSemDocumentosDto(Beneficiario beneficiario);
+    BeneficiarioResumidoDTO toBeneficiarioResumidoDto(Beneficiario beneficiario);
 
-    default Page<BeneficiarioDTO> toBeneficiariosSemDocumentosDtos(Page<Beneficiario> beneficiarios){
-        return beneficiarios.map(this::toBeneficiarioSemDocumentosDto);
+    default Page<BeneficiarioResumidoDTO> toBeneficiariosResumidoDtos(Page<Beneficiario> beneficiarios){
+        return beneficiarios.map(this::toBeneficiarioResumidoDto);
     }
 }

@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.Arrays;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -126,5 +127,19 @@ class BeneficiarioControllerIntegrationTest {
         resultActions.andExpect(status().isBadRequest());
         resultActions.andExpect(jsonPath("$.titulo").value("Regra de negócio"));
         resultActions.andExpect(jsonPath("$.mensagem").value("Não vai ser possível cadastrar este beneficiário pois tem tipo de documento duplicados"));
+    }
+
+    @Test
+    @DisplayName("Deve buscar beneficiários paginados")
+    @Order(5)
+    void deveBuscarBeneficiariosPaginados() throws Exception {
+        String filtro = URL.concat("?page=0&size=5");
+
+        ResultActions resultActions = mockMvc
+                .perform(get(filtro)
+                        .accept(MEDIA_TYPE_JSON));
+
+        resultActions.andExpect(status().isOk());
+        resultActions.andExpect(jsonPath("$.content").exists());
     }
 }

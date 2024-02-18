@@ -1,6 +1,7 @@
 package br.com.gabrielferreira.beneficiarios.api.controller;
 
 import br.com.gabrielferreira.beneficiarios.api.dto.BeneficiarioDTO;
+import br.com.gabrielferreira.beneficiarios.api.dto.BeneficiarioResumidoDTO;
 import br.com.gabrielferreira.beneficiarios.api.dto.create.BeneficiarioCreateDTO;
 import br.com.gabrielferreira.beneficiarios.api.dto.update.BeneficiarioUpdateDTO;
 import br.com.gabrielferreira.beneficiarios.api.mapper.BeneficiarioMapper;
@@ -53,15 +54,15 @@ public class BeneficiarioController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Beneficiários encontrados",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = BeneficiarioDTO.class)) })
+                            schema = @Schema(implementation = BeneficiarioResumidoDTO.class)) })
     })
     @GetMapping
-    public ResponseEntity<Page<BeneficiarioDTO>> buscarBeneficiariosPaginados(@RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
-                                                                              @RequestParam(value = "size", required = false, defaultValue = "5") Integer size){
+    public ResponseEntity<Page<BeneficiarioResumidoDTO>> buscarBeneficiariosPaginados(@RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
+                                                                                      @RequestParam(value = "size", required = false, defaultValue = "5") Integer size){
         Page<Beneficiario> beneficiarios = beneficiarioService.buscarBeneficiariosPaginados(page, size);
-        Page<BeneficiarioDTO> beneficiarioDTOS = beneficiarioMapper.toBeneficiariosSemDocumentosDtos(beneficiarios);
+        Page<BeneficiarioResumidoDTO> beneficiarioResumidoDTOS = beneficiarioMapper.toBeneficiariosResumidoDtos(beneficiarios);
 
-        return ResponseEntity.ok().body(beneficiarioDTOS);
+        return ResponseEntity.ok().body(beneficiarioResumidoDTOS);
     }
 
     @Operation(summary = "Deletar beneficiário por id")
@@ -88,11 +89,11 @@ public class BeneficiarioController {
                     content = @Content)
     })
     @PutMapping("/{id}")
-    public ResponseEntity<BeneficiarioDTO> atualizarBeneficiario(@PathVariable Long id, @Valid @RequestBody BeneficiarioUpdateDTO beneficiarioUpdateDTO){
+    public ResponseEntity<BeneficiarioResumidoDTO> atualizarBeneficiario(@PathVariable Long id, @Valid @RequestBody BeneficiarioUpdateDTO beneficiarioUpdateDTO){
         Beneficiario beneficiario = beneficiarioMapper.toBeneficiario(beneficiarioUpdateDTO);
         Beneficiario beneficiarioAtualizado = beneficiarioService.atualizarBeneficiario(id, beneficiario);
-        BeneficiarioDTO beneficiarioDTO = beneficiarioMapper.toBeneficiarioSemDocumentosDto(beneficiarioAtualizado);
+        BeneficiarioResumidoDTO beneficiarioResumidoDTO = beneficiarioMapper.toBeneficiarioResumidoDto(beneficiarioAtualizado);
 
-        return ResponseEntity.ok().body(beneficiarioDTO);
+        return ResponseEntity.ok().body(beneficiarioResumidoDTO);
     }
 }
