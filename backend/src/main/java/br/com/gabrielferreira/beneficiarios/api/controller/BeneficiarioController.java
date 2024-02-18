@@ -62,4 +62,17 @@ public class BeneficiarioController {
 
         return ResponseEntity.ok().body(beneficiarioDTOS);
     }
+
+    @Operation(summary = "Deletar beneficiário por id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Beneficiário deletado",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "Beneficiário não encontrado",
+                    content = @Content)
+    })
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarBeneficiarioPorId(@PathVariable Long id){
+        beneficiarioService.deletarBeneficiarioPorId(id);
+        return ResponseEntity.noContent().build();
+    }
 }

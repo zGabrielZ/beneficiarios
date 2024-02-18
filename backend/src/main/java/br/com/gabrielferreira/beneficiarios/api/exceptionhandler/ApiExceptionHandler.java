@@ -2,6 +2,7 @@ package br.com.gabrielferreira.beneficiarios.api.exceptionhandler;
 
 import br.com.gabrielferreira.beneficiarios.api.mapper.ErroPadraoMapper;
 import br.com.gabrielferreira.beneficiarios.domain.exception.MsgException;
+import br.com.gabrielferreira.beneficiarios.domain.exception.NaoEncontradoException;
 import br.com.gabrielferreira.beneficiarios.domain.exception.model.ErroPadraoCampos;
 import br.com.gabrielferreira.beneficiarios.domain.exception.model.ErroPadraoFormulario;
 import br.com.gabrielferreira.beneficiarios.domain.exception.model.ErroPadrao;
@@ -34,6 +35,13 @@ public class ApiExceptionHandler {
         HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
         ErroPadrao erroPadrao = erroPadraoMapper.toErroPadrao(toFusoPadraoSistema(ZonedDateTime.now()), httpStatus.value(), "Regra de negócio", e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(httpStatus).body(erroPadrao);
+    }
+
+    @ExceptionHandler(NaoEncontradoException.class)
+    public ResponseEntity<ErroPadrao> naoEncontradoException(NaoEncontradoException e, HttpServletRequest request){
+        HttpStatus httpStatus = HttpStatus.NOT_FOUND;
+        ErroPadrao erroPadraoModel = erroPadraoMapper.toErroPadrao(toFusoPadraoSistema(ZonedDateTime.now()), httpStatus.value(), "Não encontrado", e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(httpStatus).body(erroPadraoModel);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

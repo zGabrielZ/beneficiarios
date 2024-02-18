@@ -1,6 +1,7 @@
 package br.com.gabrielferreira.beneficiarios.domain.service;
 
 import br.com.gabrielferreira.beneficiarios.domain.exception.MsgException;
+import br.com.gabrielferreira.beneficiarios.domain.exception.NaoEncontradoException;
 import br.com.gabrielferreira.beneficiarios.domain.model.Beneficiario;
 import br.com.gabrielferreira.beneficiarios.domain.model.Documento;
 import br.com.gabrielferreira.beneficiarios.domain.model.enums.TipoDocumentoEnum;
@@ -35,6 +36,13 @@ public class BeneficiarioService {
     public Page<Beneficiario> buscarBeneficiariosPaginados(Integer page, Integer size){
         PageRequest pageRequest = PageRequest.of(page, size);
         return beneficiarioRepository.buscarBeneficiarios(pageRequest);
+    }
+
+    @Transactional
+    public void deletarBeneficiarioPorId(Long id){
+        Beneficiario beneficiario = beneficiarioRepository.findById(id)
+                .orElseThrow(() -> new NaoEncontradoException("Beneficiário não encontrado"));
+        beneficiarioRepository.delete(beneficiario);
     }
 
     private void validarCampos(Beneficiario beneficiario){
