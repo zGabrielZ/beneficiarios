@@ -1,0 +1,170 @@
+{
+	"info": {
+		"_postman_id": "272354ec-53dc-4c3f-af13-eb623308bf38",
+		"name": "API Beneficiários",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "7508453",
+		"_collection_link": "https://solar-moon-309015.postman.co/workspace/API-Projetos~0962cdbf-0c99-4096-8c09-d02e32a51c85/collection/7508453-272354ec-53dc-4c3f-af13-eb623308bf38?action=share&source=collection_link&creator=7508453"
+	},
+	"item": [
+		{
+			"name": "Beneficiário",
+			"item": [
+				{
+					"name": "Cadastrar beneficiário",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"Marcos da Silva\",\r\n    \"telefone\": \"(12) 2145-6481\",\r\n    \"dataNascimento\": \"1995-04-20\",\r\n    \"documentos\":[\r\n        {\r\n            \"tipoDocumento\": \"FATURAS_RECIBOS\",\r\n            \"descricao\": \"A fatura desse beneficiário já está disponível para o pagamento...\"\r\n        },\r\n        {\r\n            \"tipoDocumento\": \"INSTRUCAO_ALTA\",\r\n            \"descricao\": \"O beneficiário ja foi operado....\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/beneficiarios",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"beneficiarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar beneficiários paginados",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/beneficiarios?page=0&size=5",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"beneficiarios"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remover beneficiário",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/beneficiarios/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"beneficiarios",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar beneficiário",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"Marcos da Silva Souza\",\r\n    \"telefone\": \"(11) 99901-2544\",\r\n    \"dataNascimento\": \"1990-04-20\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/beneficiarios/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"beneficiarios",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Documento",
+			"item": [
+				{
+					"name": "Buscar documentos por beneficiários",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/beneficiarios/1/documentos?page=0&size=5",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"beneficiarios",
+								"1",
+								"documentos"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Tipo Documento",
+			"item": [
+				{
+					"name": "Buscar tipo de documento",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/tipos-documentos",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"tipos-documentos"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
